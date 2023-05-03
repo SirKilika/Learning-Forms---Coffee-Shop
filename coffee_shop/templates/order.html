@@ -1,0 +1,36 @@
+<form method="post">
+    {% csrf_token %}
+    {% if formset.non_form_errors %}
+        <div>{{ formset.non_form_errors }}</div>
+    {% endif %}
+
+    {{ formset.management_form }}
+    <div id="formsets">
+        {% for form in formset.forms %}
+            <table class="no_error">
+                {{ form.as_table }}
+            </table>
+        {% endfor %}
+    </div>
+    <div id="empty_formset" style="display: none;">
+        {{ formset.management_form }}
+        {% for form in formset %}
+            {{ form }}
+        {% endfor %}
+    </div>
+    <input type="submit" value="Submit" class="button"/>
+    <input type="button" value="Add items" id="add_items">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function() {
+            $('#add_formset').click(function() {
+                var formsetCount = $('#formsets .formset').length;
+                var newFormsetHtml = $('#empty_formset').html().replace(/__prefix__/g, formsetCount);
+                $('#formsets').append(newFormsetHtml);
+                $('#id_formset-TOTAL_FORMS').attr('value', formsetCount + 1);
+            });
+        });
+    </script>
+</form>
+
